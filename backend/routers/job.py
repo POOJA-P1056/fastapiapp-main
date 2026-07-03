@@ -1,3 +1,4 @@
+from utils.oauth2 import get_current_user, role_required
 from fastapi import APIRouter,HTTPException,Depends,status
 from schemas.job import JobCreate, JobUpdate,JobResponse
 from models.job import Job
@@ -15,19 +16,19 @@ def create_job(job: JobCreate,db:Session=Depends(get_db)):
     return db_job
 
 @router.get("/",status_code=status.HTTP_200_OK,response_model=list[JobResponse])
-def get_all_job(db:Session=Depends(get_db)):
+def get_all_job(db:Session=Depends(get_db),current_user=Depends(get_current_user)):
     jobs = db.query(Job).all()
     return jobs
 
 @router.get("/{job_id}",status_code=status.HTTP_200_OK,response_model=JobResponse)
-def get_job(job_id: int,db:Session=Depends(get_db)):
+def get_job(job_id: int,db:Session=Depends(get_db),current_user=Depends(role_required(["admin"]))):
     job = db.query(Job).filter(Job.id == job_id).first()
     if not job:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Job not found")
     return job
 
 @router.put("/{job_id}",status_code=status.HTTP_201_CREATED,response_model=JobResponse)
-def update_job(job_id: int, job: JobUpdate,db:Session=Depends(get_db)):
+def update_job(job_id: int, job: JobUpdate,db:Session=Depends(get_db),current_user=Depends(role_required(["admin"]))):
     db_job = db.query(Job).filter(Job.id == job_id).first()
     if not db_job:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Job not found")
@@ -38,7 +39,7 @@ def update_job(job_id: int, job: JobUpdate,db:Session=Depends(get_db)):
     return db_job
 
 @router.delete("/{job_id}",status_code=status.HTTP_204_NO_CONTENT)
-def delete_job(job_id: int,db:Session=Depends(get_db)):
+def delete_job(job_id: int,db:Session=Depends(get_db),current_user=Depends(role_required(["admin"]))):
     db_job = db.query(Job).filter(Job.id == job_id).first()
     if not db_job:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Job not found")

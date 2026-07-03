@@ -32,7 +32,7 @@
 - Controller -- controller logic
 - Service -- business logic
 - Repository -- data access layer
-- Middleware -- request processing pipeline
+- Middleware -- request processing pipeline(should i allow this port or not)
 - schema -- pydantic models for validation
 
 # database
@@ -136,3 +136,31 @@ npm install -g typescript
 
 - Installation:
     - pip install python-multipart
+
+
+
+    # RBAC 
+     - Role based access control 
+     -> used to give different permission to different roles 
+     -> eg: admin can do anything, user can do only specific things 
+
+     use oauth2 module to implement RBAC 
+     -->get_current_user() - for authenticated user 
+     -->role_required() - for creating access control 
+     -->create_access_token() - for creating access token with (secret_key,algorithm,payload) - token created then verify_access_token() - for decoding access token with (secret_key,algorithm,token)-token decoded then 
+
+     Architecture 
+     backend/
+        app/
+         -- main.py 
+         --database.py 
+        models/
+         --users.py
+         --company.py
+         --job.py
+        schemas/
+         --users.py
+         --company.py
+         --job.py
+        routers/
+         --users.py
