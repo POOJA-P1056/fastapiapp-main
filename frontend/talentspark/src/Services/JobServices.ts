@@ -1,25 +1,29 @@
 import axios from "axios";
-import type {job} from "../types/job"
+import type {Job} from "../types/job"
 
 const API_BASE_URL = "http://localhost:8000";
 
-export async function getJobs(id: number): Promise<job[] > {
+export async function getJobs(): Promise<Job[]> {
+    const response = await axios.get(`${API_BASE_URL}/job`);
+    return response.data;
+}
+export async function getJob_by_id(id: number): Promise<Job[] > {
     const response = await axios.get(`${API_BASE_URL}/job/${id}`);
     return response.data;
 }
 
-export async function createJobs(job: job):
-Promise<job> {
+export async function createJob(job: Job):
+Promise<Job> {
     const response = await axios.post(`${API_BASE_URL}/job`,job);
     return response.data;
 }
 
-export async function updateJobs(id: number, job:job): Promise<job>{
+export async function updateJob(id: number, job:Job): Promise<Job>{
     const response = await axios.put(`${API_BASE_URL}/job/${id}`,job);
     return response.data
 }
 
-export async function deleteJobs(id: number): Promise<void>{
+export async function deleteJob(id: number): Promise<void>{
     const response = await axios.delete(`${API_BASE_URL}/job/${id}`);
     return response.data
 }

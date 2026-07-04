@@ -20,19 +20,22 @@ def create_company(company: CompanyCreate,db:Session=Depends(get_db),current_use
     return db_company
 
 
-@router.get("/",status_code=status.HTTP_200_OK,response_model=list[CompanyResponse])
-def get_all_company(db:Session=Depends(get_db),current_user=Depends(get_current_user)):
+@router.get("/", status_code=200)
+def get_all_company(
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user)
+):
     companies = db.query(Company).all()
     return companies
 
 @router.get("/{company_id}",status_code=status.HTTP_200_OK,response_model=CompanyResponse)
-def get_company(company_id: int,db:Session=Depends(get_db),current_user=Depends(role_required(["admin"]))):
+def get_company(company_id: int,db:Session=Depends(get_db),current_user=Depends(get_current_user)):
     company = db.query(Company).filter(Company.id == company_id).first()
     if not company:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Company not found")
     return company
 
-@router.put("/{company_id}",status_code=status.HTTP_201_CREATED)
+@router.put("/{company_id}",status_code=status.HTTP_201_CREATED,response_model=CompanyResponse)
 def update_company(company_id: int, company: CompanyUpdate,db:Session=Depends(get_db),current_user=Depends(role_required(["admin"]))):
     db_company = db.query(Company).filter(Company.id == company_id).first()
     if not db_company:

@@ -19,7 +19,8 @@ class JobUpdate(JobBase):
 
 class JobResponse(JobBase):
     id: int
-    company_id: int
+
+
     
     class Config:
         from_attributes = True
