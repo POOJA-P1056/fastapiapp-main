@@ -128,35 +128,41 @@ function App() {
   }
 
   if (loading) {
-    return <div>Loading...</div>
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <div className="loading-text">Loading companies and jobs...</div>
+      </div>
+    )
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>
+    return <div className="error-container">Error: {error.message}</div>
   }
   return (
     <>
       <NavBar currentPage={currentPage} onNavigate={setCurrentPage} />
-      <br />
-      {currentPage === "home" && (
-        <>
-          <CompanyCard
-            companies={companies}
-            jobs={jobs}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            onAdd={handleAdd}
-          />
-          <JobCard
-            jobs={jobs}
-            companies={companies}
-            onEdit={handleJobEdit}
-            onDelete={handleJobDelete}
-            onAdd={handleJobAdd}
-          />
-        </>
-      )}
-      {currentPage === "chat" && <Chat />}
+      <div className="content-wrapper">
+        {currentPage === "home" && (
+          <>
+            <CompanyCard
+              companies={companies}
+              jobs={jobs}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              onAdd={handleAdd}
+            />
+            <JobCard
+              jobs={jobs}
+              companies={companies}
+              onEdit={handleJobEdit}
+              onDelete={handleJobDelete}
+              onAdd={handleJobAdd}
+            />
+          </>
+        )}
+        {currentPage === "chat" && <Chat />}
+      </div>
       <Footer />
     </>
   )
