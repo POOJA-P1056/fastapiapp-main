@@ -8,9 +8,14 @@ from schemas.rag import (
     EmbedResponse,
     JobSearchRequest, SemanticSearchResponse, SemanticSearchResult
 )
-from services.resume_service import analyse_resume
-from services.qdrant_service import embed_all_jobs, search_jobs, match_jobs_for_profile
-from services.rag_service import rag_job_search
+from Services.resume_service import analyse_resume
+from Services.qdrant_service import (
+    embed_all_jobs,
+    search_jobs,
+    match_jobs_with_query,
+    match_jobs_with_profile
+)
+from Services.rag_service import rag_job_search
 
 router = APIRouter(prefix="/rag", tags=["RAG"])
 
@@ -43,7 +48,11 @@ def resume_analyse(request: ResumeRequest):
 
 @router.post("/job-match", response_model=JobMatchResponse)
 def job_match(request: JobMatchRequest):
-    results = match_jobs_for_profile(request.skills, request.experience, top_k=5)
+    results = match_jobs_with_profile(
+    request.skills,
+    request.experience,
+    top_k=5
+)
     return JobMatchResponse(
         matches=[JobMatchResult(**r) for r in results]
     )

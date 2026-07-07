@@ -10,6 +10,10 @@ import type { Job } from "./types/job"
 import Login from "./pages/login";
 import Register from "./pages/register";
 import Chat from "./pages/chat";
+import AISearch from "./pages/AISearch";
+import ResumeAnalysis from "./pages/ResumeAnalysis";
+import JobMatch from "./pages/JobMatch";
+import EmbedJobs from "./pages/EmbedJobs";
 
 
 function App() {
@@ -143,26 +147,35 @@ function App() {
     <>
       <NavBar currentPage={currentPage} onNavigate={setCurrentPage} />
       <div className="content-wrapper">
-        {currentPage === "home" && (
-          <>
-            <CompanyCard
-              companies={companies}
-              jobs={jobs}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-              onAdd={handleAdd}
-            />
-            <JobCard
-              jobs={jobs}
-              companies={companies}
-              onEdit={handleJobEdit}
-              onDelete={handleJobDelete}
-              onAdd={handleJobAdd}
-            />
-          </>
-        )}
-        {currentPage === "chat" && <Chat />}
-      </div>
+
+  {currentPage === "home" && (
+    <>
+      <CompanyCard
+        companies={companies}
+        jobs={jobs}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+        onAdd={handleAdd}
+      />
+
+      <JobCard
+        jobs={jobs}
+        companies={companies}
+        onEdit={handleJobEdit}
+        onDelete={handleJobDelete}
+        onAdd={handleJobAdd}
+      />
+    </>
+  )}
+
+  {currentPage === "chat" && <Chat />}
+
+  {currentPage === "ai-search" && <AISearch />}
+  {currentPage === "resume-analysis" && <ResumeAnalysis />}
+  {currentPage === "job-match" && <JobMatch />}
+  {currentPage === "embed" && <EmbedJobs />}
+
+</div>
       <Footer />
     </>
   )
