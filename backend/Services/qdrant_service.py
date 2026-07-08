@@ -4,7 +4,8 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams, PointStruct
 from fastembed import TextEmbedding
 from sqlalchemy.orm import Session
-
+from sqlalchemy.ext.asyncio import AsyncSession 
+from sqlalchemy.future import select
 from models.job import Job
 
 load_dotenv()
@@ -66,10 +67,10 @@ def embed_text(text: str) -> list[float]:
 # -----------------------------
 # Store Jobs in Qdrant
 # -----------------------------
-def embed_all_jobs(db: Session):
+async def embed_all_jobs(db: AsyncSession):
     ensure_collection()
-
-    jobs = db.query(Job).all()
+    results = await db.execute(select(Job))
+    jobs = results.scalars().all()
 
     if not jobs:
         return 0
